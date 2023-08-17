@@ -1,0 +1,52 @@
+#!/bin/bash
+
+function copy_pass {
+  xed $1 &
+  sleep 1
+  xdotool key ctrl+a
+  sleep 0.5
+  xdotool key ctrl+c
+  sleep 0.5
+  xdotool key super+q
+}
+
+function setup_workflow {
+  copy_pass $1
+	sleep 1
+  xdotool key super+1
+  sleep 2
+  xdotool key super+2
+  $($2) &
+  sleep 2.5
+  xdotool key super+3
+  ./setup_tmux $3
+  sleep 1
+  xdotool key super+4
+  brave-browser --new-window web.whatsapp.com &
+  sleep 5
+  xdotool key super+1
+	./code_open
+	if [[ $3 -eq "work" ]]; then
+		notify-send "Dont forge to turn notification off"
+	fi
+}
+
+declare -a options=(
+"work"
+"personal"
+"pleasure"
+)
+
+choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu -p "What brings you here? ")
+
+if [[ $choice == 'work' ]]; then
+  setup_workflow bitbucket_access_token google-chrome work && exit
+elif [[ $choice == 'personal' ]]; then
+  setup_workflow github_access_token brave-browser personal && exit
+elif [[ $choice == 'pleasure' ]]; then
+  xdotool key super+3
+  gnome-terminal
+  sleep 1 && exit
+else
+  echo "Program terminated" && exit 1
+fi

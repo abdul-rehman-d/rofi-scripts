@@ -1,0 +1,9 @@
+#!/bin/bash
+
+choice=$(ls ~/appimages | rofi -dmenu -i -p "Choose Appimage")
+
+if [[ -z $choice ]]; then
+  exit 1
+else
+  ~/appimages/$choice
+fi

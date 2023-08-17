@@ -1,0 +1,12 @@
+#!/bin/bash
+
+function setup_tmux {
+  gnome-terminal -- tmux new
+  sleep 1
+  tmux new-window -n "indolj-nextjs" -c "$HOME/repos/indolj-nextjs" && tmux split-window -h -c "$HOME/repos/indolj-nextjs"
+  sleep 1
+  tmux new-window -n "indolj-reactjs" -c "$HOME/repos/indolj-reactjs" && tmux split-window -h -c "$HOME/repos/indolj-reactjs"
+  sleep 1
+}
+
+setup_tmux $1

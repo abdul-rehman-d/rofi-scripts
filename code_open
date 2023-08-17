@@ -1,0 +1,44 @@
+#!/bin/bash
+
+function get_only_dirs {
+	for file in $(/bin/ls $1); do
+		if [ -d $1$file ]; then
+		  echo $file
+		fi
+	done
+}
+
+declare -a options=(
+  "Work Repositories"
+  "Work PHP Repositories"
+  "Personal Repositories"
+)
+
+choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu -i -p "Choose Project")
+
+case $choice in
+
+  "Work Repositories")
+	  repo=$HOME/repos/
+    ;;
+
+  "Work PHP Repositories")
+	  repo=$HOME/www/
+    ;;
+
+  "Personal Repositories")
+	  repo=$HOME/personal-repos/
+    ;;
+
+  *)
+    exit 1
+    ;;
+esac
+
+choice=$(get_only_dirs $repo | rofi -dmenu -i -p "Choose Project")
+
+if [[ -z $choice ]]; then
+	exit 1
+else
+	code $repo$choice
+fi
